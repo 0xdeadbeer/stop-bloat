@@ -15,7 +15,6 @@ def clear_terminal():
         os.system("clear")
 
 def banner(): 
-    clear_terminal()
     break_line()
     print ("   _____ _              ____  _             _    ")
     print ("  / ____| |            |  _ \| |           | |   ")
@@ -29,19 +28,75 @@ def banner():
 
 
 # classes 
+
+class FunctionCalls: 
+
+    def show_bloated_packages(): 
+        print ("Show bloated packages")
+    
+    def add_package(package, category): 
+        print ("Add package | " + package + " - " + category)
+    
+    def add_category(category): 
+        print ("Add category | " + category)
+    
+    def remove_package(package, category): 
+        print ("Remove package | " + package + " - " + category) 
+    
+    def remove_category(category): 
+        print ("Remove category | " + category) 
+    
+    def search(package): 
+        print ("Seach | " + package) 
+    
+    def search_category(category): 
+        print ("Search category | " + category) 
+    
+    def block_package(package): 
+        print ("Block package | " + package) 
+    
+    def block_category(category): 
+        print ("Block category | " + category) 
+    
+    def block_full(): 
+        print ("Block full")
+    
+    def unblock_package(package): 
+        print ("Unblock pacakge | " + package) 
+
+    def unblock_category(category): 
+        print ("Unblock category | " + category) 
+    
+    def unblock_full(): 
+        print ("Unblock full") 
+
 class Commands: 
     commands = {
         "help": {
-            "identity": "command",
+            "identity": "primary_command",
             "description": "Show the help manual",
             "command": "help_page",
             "command_type": "function_call",
             "args": 0
         },
+        "quit": {
+            "identity": "primary_command",
+            "description": "Exit the script",
+            "command": "exit",
+            "command_type": "function_call", 
+            "args": 0
+        },
         "clear": {
-            "identity": "command",
+            "identity": "primary_command",
             "description": "Clear the screen",
             "command": "clear_terminal",
+            "command_type": "function_call",
+            "args": 0
+        },
+        "banner": {
+            "identity": "primary_command",
+            "description": "Show the script's banner",
+            "command": "show_banner",
             "command_type": "function_call",
             "args": 0
         },
@@ -70,8 +125,8 @@ class Commands:
             "show": {
                 "identity": "command",
                 "description": "Show all of the packages alongside the categories",
-                "command": "show_bloated_packages", 
-                "command_type": "function_call",
+                "command": "tail -n +1 lists/*/*", 
+                "command_type": "linux_command",
                 "args": 0
             },
             "show:categories": {
@@ -189,8 +244,21 @@ class Commands:
         },
     }
 
+    # primary commands 
+
     def help_page(self): 
         print ("help page")
+    
+    def clear_terminal(self): 
+        clear_terminal()
+
+    def show_banner(self): 
+        banner()
+    
+    def exit(self): 
+        quit()
+
+    # get arguments functions 
 
     def function_call_get_args(self, array, start, args_num):
         result = []
@@ -207,6 +275,8 @@ class Commands:
         
         return result 
 
+
+    # execute command function 
 
     def execute(self, command): 
         command = command.strip() 
@@ -233,7 +303,7 @@ class Commands:
                     print ("[!!] Command not found")
                     return 
             
-            if type(main_command_info) is not dict or ("identity" not in main_command_info or main_command_info["identity"] != "command"):
+            if type(main_command_info) is not dict or "identity" not in main_command_info:
                 print ("[!!] Command not found") 
                 return 
 
@@ -249,8 +319,11 @@ class Commands:
 
                 args = self.function_call_get_args(command, num, args_num)
 
+                function_calls = FunctionCalls()
+                function_class = "self." if (main_command_info["identity"] == "primary_command") else "function_calls"
+
                 try: 
-                    eval("self." + main_command_info["command"] + "(" + args + ")")
+                    eval(function_class + main_command_info["command"] + "(" + args + ")")
                 except Exception as e: 
                     print ("[!!] Exception when trying to execute the command " + main_command_info["command"])
                     print (e) 
@@ -262,7 +335,10 @@ class Commands:
                 for i in range(0, args_num): 
                     linux_command = linux_command.replace("$$$", args[i])
 
-                print (linux_command)
+                print ("[!DEBUG] Executing Command: " + linux_command)
+                line() 
+
+                os.system(linux_command)
             else:
                 print ("[!!] Command type is incorrect/unknown") 
                 print ("[!!] Command type -> " + str(main_command_info["command_type"]))
@@ -272,6 +348,7 @@ def main():
     
     commands_manager = Commands()
     
+    clear_terminal()
     banner()
     line()
     break_line()
