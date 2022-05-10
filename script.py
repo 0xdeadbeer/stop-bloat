@@ -54,7 +54,13 @@ class FunctionCalls:
         entries = os.listdir(location)
         for entry in entries: 
             _location = location + entry 
-            
+            print ("Trying > " + _location)
+            with open(_location) as file: 
+                if package in file.read(): 
+                    command = "sed \'/" + package +"/d\' " + _location + " > " + location + "tmp.tmp; mv " + location + "tmp.tmp " + _location
+                    print (command)
+                    os.system(command) 
+                    break
 
     def remove_category(self, category): 
         location = "./lists/" + category + "/" 
@@ -124,7 +130,21 @@ class FunctionCalls:
                 print ("[DEBUG] Blocking package: " + line.strip() + " from category: " + category) 
     
     def unblock_full(self): 
-        print ("Unblock full") 
+        global target_device 
+        location = "./lists/" 
+        directory_entries = os.listdir(location)
+        for directory_entry in directory_entries: 
+            directory_location = location + directory_entry + "/"
+            file_entries = os.listdir(directory_location) 
+            for entry in file_entries: 
+                file_location = directory_location + entry 
+                file = open(file_location, "r")
+
+                # for line in file 
+                for line in file: 
+                    command = "adb -s " + target_device + " shell pm enable " + line.strip() + " > /dev/null 2>&1 0>&1" 
+                    os.system(command)
+                    print ("[DEBUG] Blocking package: " + line.strip() + " from category: " + directory_entry) 
     
     def connect_to_device(self, id): 
         global target_device
