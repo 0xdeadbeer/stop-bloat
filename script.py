@@ -42,39 +42,88 @@ class FunctionCalls:
         self.control_system = ControlSystem() 
 
     def add_package(self, package, category): 
-        print ("Add package | " + package + " - " + category)
-    
+        location = "./lists/" + category + "/personal-list.bloat"
+        os.system("echo \"" + package + "\" >> " + location)
+
     def add_category(self, category): 
-        print ("Add category | " + category)
-    
+        location = "./lists/" + category + "/"
+        os.system("mkdir " + location)
+
     def remove_package(self, package, category): 
-        print ("Remove package | " + package + " - " + category) 
-    
+        location = "./lists/" + category + "/"
+        entries = os.listdir(location)
+        for entry in entries: 
+            _location = location + entry 
+            
+
     def remove_category(self, category): 
-        print ("Remove category | " + category) 
-    
+        location = "./lists/" + category + "/" 
+        os.system("rm -rf " + location) 
+
     def search(self, package): 
-        print ("Seach | " + package) 
-    
+        location = "./lists/*/*"
+        os.system("grep " + package + " " + location)
+
     def search_category(self, category): 
-        print ("Search category | " + category) 
-    
-    def block_package(self, package): 
-        print ("Block package | " + package) 
-    
+        location = "./lists/" 
+        os.system("ls " + location + " | grep " + category)
+
+    def block_package(self, package):
+        global target_device  
+        command = "adb -s " + target_device + " shell pm disable-user --user 0 " + package
+        os.system(command) 
+
     def block_category(self, category): 
-        print ("Block category | " + category) 
-    
-    def block_full(self, ): 
-        print ("Block full")
-    
+        global target_device 
+        location = "./lists/" + category + "/" 
+        entries = os.listdir(location)
+        for entry in entries: 
+            file_location = location + entry 
+            file = open(file_location, "r")
+
+            # for line in file 
+            for line in file: 
+                command = "adb -s " + target_device + " shell pm disable-user --user 0 " + line.strip() + " > /dev/null 2>&1 0>&1" 
+                os.system(command)
+                print ("[DEBUG] Blocking package: " + line.strip() + " from category: " + category) 
+
+    def block_full(self): 
+        global target_device 
+        location = "./lists/" 
+        directory_entries = os.listdir(location)
+        for directory_entry in directory_entries: 
+            directory_location = location + directory_entry + "/"
+            file_entries = os.listdir(directory_location) 
+            for entry in file_entries: 
+                file_location = directory_location + entry 
+                file = open(file_location, "r")
+
+                # for line in file 
+                for line in file: 
+                    command = "adb -s " + target_device + " shell pm disable-user --user 0 " + line.strip() + " > /dev/null 2>&1 0>&1" 
+                    os.system(command)
+                    print ("[DEBUG] Blocking package: " + line.strip() + " from category: " + directory_entry) 
+
     def unblock_package(self, package): 
-        print ("Unblock pacakge | " + package) 
+        global target_device  
+        command = "adb -s " + target_device + " shell pm enable " + package
+        os.system(command) 
 
     def unblock_category(self, category): 
-        print ("Unblock category | " + category) 
+        global target_device 
+        location = "./lists/" + category + "/" 
+        entries = os.listdir(location)
+        for entry in entries: 
+            file_location = location + entry 
+            file = open(file_location, "r")
+
+            # for line in file 
+            for line in file: 
+                command = "adb -s " + target_device + " shell pm enable " + line.strip() + " > /dev/null 2>&1 0>&1" 
+                os.system(command)
+                print ("[DEBUG] Blocking package: " + line.strip() + " from category: " + category) 
     
-    def unblock_full(self, ): 
+    def unblock_full(self): 
         print ("Unblock full") 
     
     def connect_to_device(self, id): 

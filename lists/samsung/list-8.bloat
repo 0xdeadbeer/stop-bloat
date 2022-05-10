@@ -1,4 +1,4 @@
-samsung.android.hmt.vrsvc
-samsung.android.app.vrsetupwizardstub
-samsung.android.hmt.vrshell
-google.vr.vrcore
+com.samsung.android.hmt.vrsvc
+com.samsung.android.app.vrsetupwizardstub
+com.samsung.android.hmt.vrshell
+com.google.vr.vrcore

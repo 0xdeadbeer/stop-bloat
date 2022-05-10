@@ -1,8 +1,8 @@
-samsung.android.bixby.wakeup
-samsung.android.app.spage
-samsung.android.app.routines
-samsung.android.bixby.service
-samsung.android.visionintelligence
-samsung.android.bixby.agent
-samsung.android.bixby.agent.dummy
-samsung.android.bixbyvision.framework
+com.samsung.android.bixby.wakeup
+com.samsung.android.app.spage
+com.samsung.android.app.routines
+com.samsung.android.bixby.service
+com.samsung.android.visionintelligence
+com.samsung.android.bixby.agent
+com.samsung.android.bixby.agent.dummy
+com.samsung.android.bixbyvision.framework

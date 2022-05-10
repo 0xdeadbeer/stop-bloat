@@ -1,4 +1,4 @@
-cnn.mobile.android.phone.edgepanel
-samsung.android.service.peoplestripe
-samsung.android.app.sbrowseredge
-samsung.android.app.appsedge
+com.cnn.mobile.android.phone.edgepanel
+com.samsung.android.service.peoplestripe
+com.samsung.android.app.sbrowseredge
+com.samsung.android.app.appsedge
